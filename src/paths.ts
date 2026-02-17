@@ -1,3 +1,4 @@
-export const ticketsPath = () => "/tickets";
+export const homePath = () => "/";
 
-export const ticketPath = (ticketId: string) => `${ticketsPath}/${ticketId}`;
+export const ticketsPath = () => "/tickets";
+export const ticketPath = (ticketId: string) => `tickets/${ticketId}`;
