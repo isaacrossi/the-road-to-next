@@ -1,4 +1,5 @@
 import "./globals.css";
+import { LucideTickets } from "lucide-react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
@@ -41,9 +42,10 @@ export default function RootLayout({
           <div>
             <Link
               href={homePath()}
-              className={buttonVariants({ variant: "outline" })}
+              className={buttonVariants({ variant: "ghost" })}
             >
-              Home
+              <LucideTickets />
+              <h1 className="font-lg font-semibold">TicketBounty</h1>
             </Link>
           </div>
           <div>
