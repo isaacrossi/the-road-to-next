@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card";
+import { TicketCreateForm } from "@/src/features/ticket/components/ticket-create-form";
 import { TicketList } from "@/src/features/ticket/components/ticket-list";
 
 const TicketsPage = () => {
@@ -19,10 +20,12 @@ const TicketsPage = () => {
 
       <Card className="w-full max-w-[420px] self-center">
         <CardHeader>
-          <CardTitle></CardTitle>
+          <CardTitle>Create Ticket</CardTitle>
           <CardDescription>A new ticket will be created</CardDescription>
         </CardHeader>
-        <CardContent>TicketCreateForm</CardContent>
+        <CardContent>
+          <TicketCreateForm />
+        </CardContent>
       </Card>
 
       <ErrorBoundary fallback={<Placeholder label="Something went wrong!" />}>
