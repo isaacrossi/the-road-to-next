@@ -4,8 +4,8 @@ import { CardCompact } from "@/src/components/card-compact";
 import { Heading } from "@/src/components/heading";
 import { Placeholder } from "@/src/components/placeholder";
 import { Spinner } from "@/src/components/spinner";
-import { TicketCreateForm } from "@/src/features/ticket/components/ticket-create-form";
 import { TicketList } from "@/src/features/ticket/components/ticket-list";
+import { TicketUpsertForm } from "@/src/features/ticket/components/ticket-upsert-form";
 
 const TicketsPage = () => {
   return (
@@ -16,7 +16,7 @@ const TicketsPage = () => {
         title="Create Ticket"
         description="A new ticket will be created"
         className="w-full max-w-[420px] self-center"
-        content={<TicketCreateForm />}
+        content={<TicketUpsertForm />}
       />
 
       <ErrorBoundary fallback={<Placeholder label="Something went wrong!" />}>
