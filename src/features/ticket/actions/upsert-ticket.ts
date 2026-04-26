@@ -13,7 +13,7 @@ const upsertTicketSchema = z.object({
 
 export const upsertTicket = async (
   id: string | undefined,
-  _actionState: { message: string },
+  _actionState: { message: string; payload?: FormData },
   formData: FormData,
 ) => {
   try {
@@ -28,7 +28,10 @@ export const upsertTicket = async (
       create: data,
     });
   } catch (error) {
-    return { message: "An error occurred while saving the ticket." };
+    return {
+      message: "An error occurred while saving the ticket.",
+      payload: formData,
+    };
   }
 
   revalidatePath(ticketsPath());
