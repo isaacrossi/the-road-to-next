@@ -7,6 +7,7 @@ import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { Textarea } from "@/src/components/ui/textarea";
 import { upsertTicket } from "../actions/upsert-ticket";
+import { FieldError } from "@/src/components/form/field-error";
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
@@ -15,7 +16,7 @@ type TicketUpsertFormProps = {
 const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
   const [actionState, action] = useActionState(
     upsertTicket.bind(null, ticket?.id),
-    { message: "" },
+    { message: "", fieldErrors: {} },
   );
 
   return (
@@ -29,6 +30,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
           (actionState.payload?.get("title") as string) ?? ticket?.title
         }
       />
+      <FieldError actionState={actionState} name="title" />
 
       <Label htmlFor="content">Content</Label>
       <Textarea
@@ -38,6 +40,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
           (actionState.payload?.get("content") as string) ?? ticket?.content
         }
       />
+      <FieldError actionState={actionState} name="content" />
 
       <SubmitButton label={ticket ? "Edit" : "Create"} />
 
