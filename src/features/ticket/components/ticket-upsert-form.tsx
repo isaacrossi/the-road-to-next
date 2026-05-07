@@ -8,6 +8,7 @@ import { Label } from "@/src/components/ui/label";
 import { Textarea } from "@/src/components/ui/textarea";
 import { upsertTicket } from "../actions/upsert-ticket";
 import { FieldError } from "@/src/components/form/field-error";
+import { EMPTY_ACTION_STATE } from "@/src/components/form/utils/to-action-state";
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
@@ -16,7 +17,7 @@ type TicketUpsertFormProps = {
 const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
   const [actionState, action] = useActionState(
     upsertTicket.bind(null, ticket?.id),
-    { message: "", fieldErrors: {} },
+    EMPTY_ACTION_STATE,
   );
 
   return (
