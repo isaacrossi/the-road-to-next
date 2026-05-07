@@ -2,13 +2,14 @@
 
 import { Ticket } from "@prisma/client";
 import { useActionState } from "react";
+import { FieldError } from "@/src/components/form/field-error";
+import { useActionFeedback } from "@/src/components/form/hooks/use-action-feedback";
 import { SubmitButton } from "@/src/components/form/submit-button";
+import { EMPTY_ACTION_STATE } from "@/src/components/form/utils/to-action-state";
 import { Input } from "@/src/components/ui/input";
 import { Label } from "@/src/components/ui/label";
 import { Textarea } from "@/src/components/ui/textarea";
 import { upsertTicket } from "../actions/upsert-ticket";
-import { FieldError } from "@/src/components/form/field-error";
-import { EMPTY_ACTION_STATE } from "@/src/components/form/utils/to-action-state";
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
@@ -19,6 +20,15 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
     upsertTicket.bind(null, ticket?.id),
     EMPTY_ACTION_STATE,
   );
+
+  useActionFeedback(actionState, {
+    onSuccess: ({ actionState }) => {
+      console.log(actionState.message);
+    },
+    onError: ({ actionState }) => {
+      console.log(actionState.message);
+    },
+  });
 
   return (
     <form action={action} className="flex flex-col gap-y-2">
