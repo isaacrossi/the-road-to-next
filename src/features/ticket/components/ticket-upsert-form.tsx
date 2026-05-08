@@ -54,8 +54,6 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       <FieldError actionState={actionState} name="content" />
 
       <SubmitButton label={ticket ? "Edit" : "Create"} />
-
-      {actionState.message}
     </form>
   );
 };
