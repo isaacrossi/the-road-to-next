@@ -17,11 +17,9 @@ const useActionFeedback = (
   const prevTimestamp = useRef(actionState.timestamp);
 
   useEffect(() => {
-    if (actionState.timestamp === prevTimestamp.current) {
-      return;
-    }
+    const isUpdate = actionState.timestamp !== prevTimestamp.current;
 
-    prevTimestamp.current = actionState.timestamp;
+    if (!isUpdate) return;
 
     if (actionState.status === "SUCCESS") {
       options.onSuccess?.({ actionState });
@@ -30,6 +28,8 @@ const useActionFeedback = (
     if (actionState.status === "ERROR") {
       options.onError?.({ actionState });
     }
+
+    prevTimestamp.current = actionState.timestamp;
   }, [actionState, options]);
 };
 

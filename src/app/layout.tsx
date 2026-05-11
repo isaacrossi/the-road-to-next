@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 import { Header } from "@/src/components/header";
 import { ThemeProvider } from "@/src/components/themes/theme-provider";
 
@@ -42,6 +43,7 @@ export default function RootLayout({
           >
             {children}
           </main>
+          <Toaster expand />
         </ThemeProvider>
       </body>
     </html>
