@@ -10,6 +10,6 @@ export const deleteTicket = async (id: string) => {
   await prisma.ticket.delete({ where: { id } });
 
   revalidatePath(ticketsPath());
-  setCookieByKey("toast", "Ticket deleted");
+  await setCookieByKey("toast", "Ticket deleted");
   redirect(ticketsPath());
 };
