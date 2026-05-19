@@ -6,17 +6,16 @@
 
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { deleteCookieByKey, getCookieByKey } from "@/src/actions/cookies";
+import { consumeCookieByKey } from "@/src/actions/cookies";
 
 // component used to show toast on redirect
 const RedirectToast = () => {
   useEffect(() => {
     const showCookieToast = async () => {
-      const message = await getCookieByKey("toast");
+      const message = await consumeCookieByKey("toast");
 
       if (message) {
         toast.success(message);
-        await deleteCookieByKey("toast");
       }
     };
 
