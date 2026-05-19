@@ -4,12 +4,15 @@
 // By using a component, we keep the layout as a Server Component.
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { consumeCookieByKey } from "@/src/actions/cookies";
 
 // component used to show toast on redirect
 const RedirectToast = () => {
+  const pathname = usePathname();
+
   useEffect(() => {
     const showCookieToast = async () => {
       const message = await consumeCookieByKey("toast");
@@ -20,7 +23,7 @@ const RedirectToast = () => {
     };
 
     showCookieToast();
-  }, []);
+  }, [pathname]);
 
   return null;
 };
