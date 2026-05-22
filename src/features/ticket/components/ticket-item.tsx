@@ -6,16 +6,16 @@ import {
   LucideTrash,
 } from "lucide-react";
 import Link from "next/link";
-import { Button, buttonVariants } from "@/src/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/src/components/ui/card";
-import { ticketEditPath, ticketPath } from "@/src/paths";
-import { toCurrencyFromCent } from "@/src/utils/currency";
+} from "@/components/ui/card";
+import { ticketEditPath, ticketPath } from "@/paths";
+import { toCurrencyFromCent } from "@/utils/currency";
 import { deleteTicket } from "../actions/delete-ticket";
 import { TICKET_ICONS } from "../constants";
 

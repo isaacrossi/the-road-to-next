@@ -7,7 +7,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { consumeCookieByKey } from "@/src/actions/cookies";
+import { consumeCookieByKey } from "@/actions/cookies";
 
 // component used to show toast on redirect
 const RedirectToast = () => {

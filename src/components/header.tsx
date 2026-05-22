@@ -1,6 +1,6 @@
 import { LucideTickets } from "lucide-react";
 import Link from "next/link";
-import { homePath, ticketsPath } from "@/src/paths";
+import { homePath, ticketsPath } from "@/paths";
 import { ThemeSwithcher } from "./themes/theme-switcher";
 import { buttonVariants } from "./ui/button";
 

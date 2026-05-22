@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Placeholder } from "@/src/components/placeholder";
-import { Button } from "@/src/components/ui/button";
-import { ticketsPath } from "@/src/paths";
+import { Placeholder } from "@/components/placeholder";
+import { Button } from "@/components/ui/button";
+import { ticketsPath } from "@/paths";
 
 export default function NotFound() {
   return (

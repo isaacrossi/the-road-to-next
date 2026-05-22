@@ -3,15 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { setCookieByKey } from "@/src/actions/cookies";
+import { setCookieByKey } from "@/actions/cookies";
 import {
   ActionState,
   fromErrorToActionState,
   toActionState,
-} from "@/src/components/form/utils/to-action-state";
-import { prisma } from "@/src/lib/prisma";
-import { ticketPath, ticketsPath } from "@/src/paths";
-import { toCent } from "@/src/utils/currency";
+} from "@/components/form/utils/to-action-state";
+import { prisma } from "@/lib/prisma";
+import { ticketPath, ticketsPath } from "@/paths";
+import { toCent } from "@/utils/currency";
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
