@@ -24,10 +24,17 @@ const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
     defaultValue ? new Date(defaultValue) : new Date(),
   );
 
+  const [open, setOpen] = useState(false);
+
   const formattedStringDate = date ? format(date, "yyyy-MM-dd") : "";
 
+  const handleSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    setOpen(false); // Close the popover after selection
+  };
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       {/* 
         We replaced a native HTML <input type="date"> (which automatically submitted its value)
         with shadcn's DatePicker (which only renders a trigger <button>).
@@ -51,7 +58,7 @@ const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={handleSelect}
           defaultMonth={date}
         />
       </PopoverContent>
