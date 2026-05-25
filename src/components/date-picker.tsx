@@ -2,7 +2,7 @@
 
 import { format } from "date-fns";
 import { LucideChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useImperativeHandle, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -11,18 +11,39 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+// we extract the typing of the imperative handle again
+// so that we can use it in the parent component and keeps things consistent
+export type ImperativeHandleFromDatePicker = {
+  reset: () => void;
+};
+
 type DatePickerProps = {
   id: string;
   name: string;
   defaultValue?: string | undefined;
+  // Here we type the expected function signature of the imperative handle using the exported type
+  imperativeHandleRef?: React.RefObject<ImperativeHandleFromDatePicker | null>;
 };
 
-const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
+const DatePicker = ({
+  id,
+  name,
+  defaultValue,
+  imperativeHandleRef,
+}: DatePickerProps) => {
   // We manage the selected date state locally, initializing it with the defaultValue prop if it exists
   // (otherwise defaulting to today)
   const [date, setDate] = useState<Date | undefined>(
     defaultValue ? new Date(defaultValue) : new Date(),
   );
+
+  // using the hook to define (not type) the reset function
+  // First paramter is the ref and the second parameter is a function that returns and object and in
+  // this object we define the functions that we want to expose to the parent component
+  useImperativeHandle(imperativeHandleRef, () => ({
+    // the reset function just resets the date to today's date
+    reset: () => setDate(new Date()),
+  }));
 
   const [open, setOpen] = useState(false);
 
