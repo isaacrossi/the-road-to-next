@@ -31,8 +31,18 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
 
   // because this is calling a server action we need to make it async and also we have to await it
   const handleUpdateTicketStatus = async (value: string) => {
-    const result = await updateTicketStatus(ticket.id, value as TicketStatus);
+    // not awaiting this yet
+    const promise = updateTicketStatus(ticket.id, value as TicketStatus);
 
+    // toast promise function, once the promise resolves, the toast with  the loading message disappears
+    toast.promise(promise, {
+      loading: "Updating status...", // displayed while promise is pending
+    });
+
+    // awaiting the result
+    const result = await promise;
+
+    // then showing either success or error toasts using the result
     if (result.status === "ERROR") {
       toast.error(result.message);
     } else if (result.status === "SUCCESS") {
