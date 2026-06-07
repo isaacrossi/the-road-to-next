@@ -6,6 +6,30 @@ datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id String @id @default(cuid())
+  username String @unique
+  email String @unique
+  // dont want store plain passwords in db. The password will be hashed thus protected in the case of a db breach
+  passwordHash String
+  sessions Session[]
+}
+
+model Session {
+  // no default id because lucia handles this
+  id String @id
+  expiresAt DateTime 
+  userId String
+  // Cascade on delete means that if the user is deleted, all of their sessions will be deleted as well
+  // This is because a session cannot exist without a user
+  // user is back relation and if user is deleted so is session. More one this later
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // whenever you introduce a relation like this you have to add this line here
+  // this helps speed up queries involving this relation
+  @@index([userId])
+}
+
 model Ticket {
   id String @id @default(cuid())
   createdAt DateTime @default(now())
