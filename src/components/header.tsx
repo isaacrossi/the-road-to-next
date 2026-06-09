@@ -1,10 +1,33 @@
 import { LucideTickets } from "lucide-react";
 import Link from "next/link";
-import { homePath, ticketsPath } from "@/paths";
+import { homePath, signInPath, signUpPath, ticketsPath } from "@/paths";
 import { ThemeSwithcher } from "./themes/theme-switcher";
 import { buttonVariants } from "./ui/button";
 
 const Header = () => {
+  const navItems = (
+    <>
+      <Link
+        href={ticketsPath()}
+        className={buttonVariants({ variant: "default" })}
+      >
+        Tickets
+      </Link>
+      <Link
+        href={signInPath()}
+        className={buttonVariants({ variant: "outline" })}
+      >
+        Sign In
+      </Link>
+      <Link
+        href={signUpPath()}
+        className={buttonVariants({ variant: "outline" })}
+      >
+        Sign Up
+      </Link>
+    </>
+  );
+
   return (
     <nav
       className="
@@ -25,12 +48,7 @@ const Header = () => {
       </div>
       <div className="flex align-items gap-x-2">
         <ThemeSwithcher />
-        <Link
-          href={ticketsPath()}
-          className={buttonVariants({ variant: "default" })}
-        >
-          Tickets
-        </Link>
+        {navItems}
       </div>
     </nav>
   );
