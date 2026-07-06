@@ -1,11 +1,14 @@
 "use server";
 
+import { hash } from "@node-rs/argon2";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { ActionState } from "@/components/form/utils/to-action-state";
-import {
-  fromErrorToActionState,
-  toActionState,
-} from "@/components/form/utils/to-action-state";
+import { fromErrorToActionState } from "@/components/form/utils/to-action-state";
+import { lucia } from "@/lib/lucia";
+import { prisma } from "@/lib/prisma";
+import { ticketsPath } from "@/paths";
 
 const signUpSchema = z
   .object({
@@ -39,17 +42,46 @@ const signUpSchema = z
 // takes our action state even though we don't use it (prevents issues when using useActionState hook) and our form data from our form
 export const signUp = async (_actionState: ActionState, formData: FormData) => {
   // will check for confirmed password in validation schema
-
+  // username, email, password are the entries we want to store in our database. confirmPassword is just for validation.
   try {
     const { username, email, password } = signUpSchema.parse(
       // shortcut to get object from formData
       Object.fromEntries(formData),
     );
 
-    // TODO store in database
+    // comes from our argon library to hash our password. It is an async function.
+    // We are hashing the password entered by user retrieved from the form data
+    // Then below we create a user with that hashed password
+    const passwordHash = await hash(password);
+
+    // using our prisma client to create a new user in our database
+    // notice password is passwordHash not password.
+    // This ensures we don't store plain passwords
+    // and also in our schema it says passwordHash in our User model
+    const user = await prisma.user.create({
+      data: {
+        username,
+        email,
+        passwordHash,
+      },
+    });
+
+    // creating the session (with no additional data since we don't need anything else at the moment)
+    const session = await lucia.createSession(user.id, {});
+
+    // create a session cookie to persist the session for the user
+    const sessionCookie = lucia.createSessionCookie(session.id);
+
+    // setting the cookie with the next js cookie api
+    const cookieStore = await cookies();
+    cookieStore.set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes,
+    );
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }
 
-  return toActionState("SUCCESS", "Sign up successful");
+  redirect(ticketsPath());
 };
