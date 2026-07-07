@@ -17,19 +17,33 @@ const SignUpForm = () => {
   return (
     // our custom Form component gives us our styling and will also show a toast message on error or success
     <Form action={action} actionState={actionState}>
-      <Input name="username" placeholder="username" />
+      <Input
+        name="username"
+        placeholder="username"
+        defaultValue={actionState.payload?.get("username") as string}
+      />
       <FieldError actionState={actionState} name="username" />
 
-      <Input name="email" placeholder="email" />
+      <Input
+        name="email"
+        placeholder="email"
+        defaultValue={actionState.payload?.get("email") as string}
+      />
       <FieldError actionState={actionState} name="email" />
 
-      <Input name="password" placeholder="password" type="password" />
+      <Input
+        name="password"
+        placeholder="password"
+        type="password"
+        defaultValue={actionState.payload?.get("password") as string}
+      />
       <FieldError actionState={actionState} name="password" />
 
       <Input
         name="confirmPassword"
         placeholder="confirm password"
         type="password"
+        defaultValue={actionState.payload?.get("confirmPassword") as string}
       />
       <FieldError actionState={actionState} name="confirmPassword" />
 
