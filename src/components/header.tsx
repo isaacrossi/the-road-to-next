@@ -1,6 +1,8 @@
-import { LucideTickets } from "lucide-react";
+import { LucideLogOut, LucideTickets } from "lucide-react";
 import Link from "next/link";
+import { signOut } from "@/features/auth/actions/sign-out";
 import { homePath, signInPath, signUpPath, ticketsPath } from "@/paths";
+import { SubmitButton } from "./form/submit-button";
 import { ThemeSwithcher } from "./themes/theme-switcher";
 import { buttonVariants } from "./ui/button";
 
@@ -25,6 +27,9 @@ const Header = () => {
       >
         Sign Up
       </Link>
+      <form action={signOut}>
+        <SubmitButton label="Sign out" icon={<LucideLogOut />} />
+      </form>
     </>
   );
 
