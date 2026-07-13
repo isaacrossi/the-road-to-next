@@ -1,13 +1,17 @@
 import { LucideLogOut, LucideTickets } from "lucide-react";
 import Link from "next/link";
 import { signOut } from "@/features/auth/actions/sign-out";
+import { getAuth } from "@/features/auth/queries/get-auth";
 import { homePath, signInPath, signUpPath, ticketsPath } from "@/paths";
 import { SubmitButton } from "./form/submit-button";
 import { ThemeSwithcher } from "./themes/theme-switcher";
 import { buttonVariants } from "./ui/button";
 
-const Header = () => {
-  const navItems = (
+const Header = async () => {
+  // get our currently logged in user
+  const { user } = await getAuth();
+
+  const navItems = user ? (
     <>
       <Link
         href={ticketsPath()}
@@ -15,21 +19,24 @@ const Header = () => {
       >
         Tickets
       </Link>
-      <Link
-        href={signInPath()}
-        className={buttonVariants({ variant: "outline" })}
-      >
-        Sign In
-      </Link>
+      <form action={signOut}>
+        <SubmitButton label="Sign out" icon={<LucideLogOut />} />
+      </form>
+    </>
+  ) : (
+    <>
       <Link
         href={signUpPath()}
         className={buttonVariants({ variant: "outline" })}
       >
         Sign Up
       </Link>
-      <form action={signOut}>
-        <SubmitButton label="Sign out" icon={<LucideLogOut />} />
-      </form>
+      <Link
+        href={signInPath()}
+        className={buttonVariants({ variant: "default" })}
+      >
+        Sign In
+      </Link>
     </>
   );
 
