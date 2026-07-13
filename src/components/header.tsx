@@ -3,6 +3,7 @@
 import { User as AuthUser } from "lucia";
 import { LucideLogOut, LucideTickets } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getAuth } from "@/features/auth/actions/get-auth";
 import { signOut } from "@/features/auth/actions/sign-out";
@@ -13,15 +14,22 @@ import { buttonVariants } from "./ui/button";
 
 const Header = () => {
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [isFetched, setFetched] = useState(false);
+
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchUser = async () => {
       const { user } = await getAuth();
       setUser(user);
+      setFetched(true);
     };
-
     fetchUser();
-  }, []);
+  }, [pathname]);
+
+  if (!isFetched) {
+    return null;
+  }
 
   const navItems = user ? (
     <>
@@ -55,6 +63,7 @@ const Header = () => {
   return (
     <nav
       className="
+            animate-header-from-top
             supports-backdrop-blur:bg-background/60
             fixed left-0 right-0 top-0 z-20
             border-b bg-background/95 backdrop-blur
