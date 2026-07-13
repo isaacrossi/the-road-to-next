@@ -1,15 +1,27 @@
+"use client";
+
+import { User as AuthUser } from "lucia";
 import { LucideLogOut, LucideTickets } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getAuth } from "@/features/auth/actions/get-auth";
 import { signOut } from "@/features/auth/actions/sign-out";
-import { getAuth } from "@/features/auth/queries/get-auth";
 import { homePath, signInPath, signUpPath, ticketsPath } from "@/paths";
 import { SubmitButton } from "./form/submit-button";
 import { ThemeSwithcher } from "./themes/theme-switcher";
 import { buttonVariants } from "./ui/button";
 
-const Header = async () => {
-  // get our currently logged in user
-  const { user } = await getAuth();
+const Header = () => {
+  const [user, setUser] = useState<AuthUser | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { user } = await getAuth();
+      setUser(user);
+    };
+
+    fetchUser();
+  }, []);
 
   const navItems = user ? (
     <>
