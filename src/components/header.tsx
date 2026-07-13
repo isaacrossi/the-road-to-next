@@ -1,31 +1,16 @@
 "use client";
 
-import { User as AuthUser } from "lucia";
 import { LucideLogOut, LucideTickets } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { getAuth } from "@/features/auth/actions/get-auth";
 import { signOut } from "@/features/auth/actions/sign-out";
+import { useAuth } from "@/features/auth/hooks/use-auth";
 import { homePath, signInPath, signUpPath, ticketsPath } from "@/paths";
 import { SubmitButton } from "./form/submit-button";
 import { ThemeSwithcher } from "./themes/theme-switcher";
 import { buttonVariants } from "./ui/button";
 
 const Header = () => {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [isFetched, setFetched] = useState(false);
-
-  const pathname = usePathname();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const { user } = await getAuth();
-      setUser(user);
-      setFetched(true);
-    };
-    fetchUser();
-  }, [pathname]);
+  const { user, isFetched } = useAuth();
 
   if (!isFetched) {
     return null;
