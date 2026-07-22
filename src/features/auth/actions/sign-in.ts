@@ -1,8 +1,8 @@
 "use server";
 
-import { verify } from "@node-rs/argon2";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Argon2id } from "oslo/password";
 import { z } from "zod";
 import {
   ActionState,
@@ -37,7 +37,9 @@ export const signIn = async (_actionState: ActionState, formData: FormData) => {
     // check if user shares the same password that the user has put into the form
     // we use argons verify function for this so can compare the hash againts the regular password
     // we pass passwordHash because that is what is stored in the db
-    const validPassword = await verify(user.passwordHash, password);
+    const argon = new Argon2id();
+
+    const validPassword = await argon.verify(user.passwordHash, password);
 
     // if no valid password return an error
     if (!validPassword) {

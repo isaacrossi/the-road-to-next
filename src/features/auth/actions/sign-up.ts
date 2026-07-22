@@ -1,9 +1,9 @@
 "use server";
 
-import { hash } from "@node-rs/argon2";
 import { Prisma } from "@prisma/client";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { Argon2id } from "oslo/password";
 import { z } from "zod";
 import {
   ActionState,
@@ -56,7 +56,10 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
     // comes from our argon library to hash our password. It is an async function.
     // We are hashing the password entered by user retrieved from the form data
     // Then below we create a user with that hashed password
-    const passwordHash = await hash(password);
+
+    const argon = new Argon2id();
+
+    const passwordHash = await argon.hash(password);
 
     // using our prisma client to create a new user in our database
     // notice password is passwordHash not password.
