@@ -1,18 +1,19 @@
 "use server";
 
 import { Prisma } from "@prisma/client";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Argon2id } from "oslo/password";
 import { z } from "zod";
 import {
   ActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import { fromErrorToActionState } from "@/components/form/utils/to-action-state";
-import { lucia } from "@/lib/lucia";
+import { hashPassword } from "@/features/password/utils/hash-and-verify";
+import { createSession } from "@/lib/lucia";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
+import { generateRandomToken } from "@/utils/crypto";
+import { setSessionCookie } from "../utils/session-cookie";
 
 const signUpSchema = z
   .object({
@@ -53,13 +54,7 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
       Object.fromEntries(formData),
     );
 
-    // comes from our argon library to hash our password. It is an async function.
-    // We are hashing the password entered by user retrieved from the form data
-    // Then below we create a user with that hashed password
-
-    const argon = new Argon2id();
-
-    const passwordHash = await argon.hash(password);
+    const passwordHash = await hashPassword(password);
 
     // using our prisma client to create a new user in our database
     // notice password is passwordHash not password.
@@ -73,19 +68,10 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
       },
     });
 
-    // creating the session (with no additional data since we don't need anything else at the moment)
-    const session = await lucia.createSession(user.id, {});
+    const sessionToken = generateRandomToken();
+    const session = await createSession(sessionToken, user.id);
 
-    // create a session cookie to persist the session for the user
-    const sessionCookie = lucia.createSessionCookie(session.id);
-
-    // setting the cookie with the next js cookie api
-    const cookieStore = await cookies();
-    cookieStore.set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes,
-    );
+    await setSessionCookie(sessionToken, session.expiresAt);
   } catch (error) {
     if (
       error instanceof Prisma.PrismaClientKnownRequestError &&

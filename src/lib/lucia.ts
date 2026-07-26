@@ -1,41 +1,69 @@
-import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import { Lucia } from "lucia";
+import { hashToken } from "@/utils/crypto";
 import { prisma } from "./prisma";
 
-// adapter from the prisma adapter package not from our prisma
-// this is why we have to pass prisma.session and prisma.user to the adapter
-// user and session were defined in our prisma schema earlier
-const adapter = new PrismaAdapter(prisma.session, prisma.user);
+const SESSION_REFRESH_INTERVAL_MS = 1000 * 60 * 60 * 24 * 15; // 15 days
+const SESSION_MAX_DURATION_MS = SESSION_REFRESH_INTERVAL_MS * 2; // 30 days
 
-// whenever we use lucia we export it from the file and behind the scenes we are using the prisma adapter and this adapter
-// knows about our session and user in the db
-export const lucia = new Lucia(adapter, {
-  sessionCookie: {
-    attributes: {
-      // set to `true` when using HTTPS
-      secure: process.env.NODE_ENV === "production",
+export const createSession = async (sessionToken: string, userId: string) => {
+  const sessionId = hashToken(sessionToken);
+  const session = {
+    id: sessionId,
+    userId,
+    expiresAt: new Date(Date.now() + SESSION_MAX_DURATION_MS),
+  };
+  await prisma.session.create({
+    data: session,
+  });
+  return session;
+};
+
+export const validateSession = async (sessionToken: string) => {
+  const sessionId = hashToken(sessionToken);
+  const result = await prisma.session.findUnique({
+    where: {
+      id: sessionId,
     },
-  },
-  // this tells lucia what user attributes to pull from our user table
-  // this is important for things like session management
-  getUserAttributes: (attributes) => {
-    return {
-      username: attributes.username,
-      email: attributes.email,
-    };
-  },
-});
+    include: {
+      user: true,
+    },
+  });
 
-// IMPORTANT!
-// Type safety
-declare module "lucia" {
-  interface Register {
-    Lucia: typeof lucia;
-    DatabaseUserAttributes: DatabaseUserAttributes;
+  // if there is no session, return null
+  if (!result) {
+    return { session: null, user: null };
   }
-}
+  const { user, ...session } = result;
 
-interface DatabaseUserAttributes {
-  username: string;
-  email: string;
-}
+  // if the session is expired, delete it
+  if (Date.now() >= session.expiresAt.getTime()) {
+    await prisma.session.delete({
+      where: {
+        id: sessionId,
+      },
+    });
+    return { session: null, user: null };
+  }
+
+  // if 15 days are left until the session expires, refresh the session
+  if (Date.now() >= session.expiresAt.getTime() - SESSION_REFRESH_INTERVAL_MS) {
+    session.expiresAt = new Date(Date.now() + SESSION_MAX_DURATION_MS);
+    await prisma.session.update({
+      where: {
+        id: sessionId,
+      },
+      data: {
+        expiresAt: session.expiresAt,
+      },
+    });
+  }
+
+  return { session, user };
+};
+
+export const invalidateSession = async (sessionId: string) => {
+  await prisma.session.delete({
+    where: {
+      id: sessionId,
+    },
+  });
+};

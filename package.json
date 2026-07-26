@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2",
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.7.0",
     "@types/big.js": "^7.0.0",
