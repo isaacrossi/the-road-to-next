@@ -13,6 +13,7 @@ model User {
   // dont want store plain passwords in db. The password will be hashed thus protected in the case of a db breach
   passwordHash String
   sessions Session[]
+  tickets Ticket[]
 }
 
 model Session {
@@ -39,6 +40,12 @@ model Ticket {
   status TicketStatus @default(OPEN)
   deadline String
   bounty Int 
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  // whenever you introduce a relation like this you have to add this line here
+  // this helps speed up queries involving this relation
+  @@index([userId])
 }
 
 enum TicketStatus {
