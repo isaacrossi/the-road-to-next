@@ -41,7 +41,7 @@ model Ticket {
   deadline String
   bounty Int 
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // whenever you introduce a relation like this you have to add this line here
   // this helps speed up queries involving this relation

@@ -49,8 +49,8 @@ const seed = async () => {
   console.log("Seeding database...");
 
   // we must delete the ticket first before the user because of the foreign key in tickets that that references the user
-  await prisma.ticket.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.ticket.deleteMany();
 
   // when a user logs in using their email, we need to take the plain password and then compare it to the hashed one in the db
   // more performant to hash the password once here instead of polluting the user array with non static variables
