@@ -9,5 +9,5 @@ export const getAuthOrRedirect = async () => {
     redirect(signInPath());
   }
 
-  return;
+  return auth;
 };
