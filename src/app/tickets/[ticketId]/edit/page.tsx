@@ -24,9 +24,9 @@ const TicketEditPage = async ({ params }: TicketEditPageProps) => {
   const isTicketOwner = isOwner(user, ticket);
 
   // if not ticket found and the user is not the owner of that ticket show the not found route
-  if (!isTicketFound || !isTicketOwner) {
-    notFound();
-  }
+  // if (!isTicketFound || !isTicketOwner) {
+  //   notFound();
+  // }
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center">

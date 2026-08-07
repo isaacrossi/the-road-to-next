@@ -6,6 +6,7 @@ import {
   fromErrorToActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
+import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
 
@@ -13,11 +14,16 @@ import { ticketsPath } from "@/paths";
 // it takes an id which we just call id because we are aware we are dealing with a ticket here because its in the action name
 // it also takes a status which is a ticket status coming from our prisma client
 export const updateTicketStatus = async (id: string, status: TicketStatus) => {
+  // get authenticated user, if not redirect to sign up page
+  const { user } = await getAuthOrRedirect();
+
   try {
     await prisma.ticket.update({
       // the where clause identifies which ticket we want to update
       where: {
+        // this ensures that the ticket belongs to the current logged in user, if it doesn't it throws an error
         id,
+        userId: user.id,
       },
       // the data clause says what we want to update about that ticket, we're simply updating the status
       data: {
