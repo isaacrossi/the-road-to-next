@@ -7,6 +7,7 @@ import {
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { isOwner } from "@/features/auth/utils/is-owner";
 import { prisma } from "@/lib/prisma";
 import { ticketsPath } from "@/paths";
 
@@ -18,14 +19,25 @@ export const updateTicketStatus = async (id: string, status: TicketStatus) => {
   const { user } = await getAuthOrRedirect();
 
   try {
-    await prisma.ticket.update({
-      // the where clause identifies which ticket we want to update
+    const ticket = await prisma.ticket.findUnique({
       where: {
-        // this ensures that the ticket belongs to the current logged in user, if it doesn't it throws an error
         id,
-        userId: user.id,
       },
-      // the data clause says what we want to update about that ticket, we're simply updating the status
+    });
+
+    // if no ticket match or the user isn't the owner of the ticket, return an error state
+    if (!ticket || !isOwner(user, ticket)) {
+      return toActionState(
+        "ERROR",
+        "Ticket not found or you are not the owner",
+      );
+    }
+
+    await prisma.ticket.update({
+      where: {
+        id,
+      },
+
       data: {
         status,
       },
