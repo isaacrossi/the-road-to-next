@@ -9,8 +9,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Form } from "./form/form";
-import { SubmitButton } from "./form/submit-button";
+import { Form } from "./form/components/form";
+import { SubmitButton } from "./form/components/submit-button";
 import { ActionState, EMPTY_ACTION_STATE } from "./form/utils/to-action-state";
 
 type UseConfirmDialogProps = {

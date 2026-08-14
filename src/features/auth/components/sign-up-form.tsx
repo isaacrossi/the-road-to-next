@@ -2,9 +2,9 @@
 "use client";
 
 import { useActionState } from "react";
-import { FieldError } from "@/components/form/field-error";
-import { Form } from "@/components/form/form";
-import { SubmitButton } from "@/components/form/submit-button";
+import { FieldError } from "@/components/form/components/field-error";
+import { Form } from "@/components/form/components/form";
+import { SubmitButton } from "@/components/form/components/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Input } from "@/components/ui/input";
 import { signUp } from "@/features/auth/actions/sign-up";
