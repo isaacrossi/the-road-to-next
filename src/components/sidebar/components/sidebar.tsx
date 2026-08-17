@@ -27,7 +27,7 @@ const SideBar = () => {
 
   // 1. Show the loading skeleton while verifying auth state
   if (!isFetched) {
-    return <div className="w-[78px] h-screen border-r bg-background" />;
+    return <div className="w-[78px] bg-secondary/20" />;
   }
   // 2. Hide completely from guests once we know they are logged out
   if (!user) {
