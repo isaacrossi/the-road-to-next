@@ -1,8 +1,11 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { cn } from "@/lib/utils";
+import { signInPath, signUpPath } from "@/paths";
+import { getActivePath } from "@/utils/get-active-path";
 import { navItems } from "../constants";
 import { SidebarItem } from "./sidebar-item";
 
@@ -11,6 +14,14 @@ const SideBar = () => {
   // we opt for our hook as opposed to getAuth on it's own to prevent all pages being
   // dynamically rendered leading to slower page loads (sidebar sits at our root layout)
   const { user, isFetched } = useAuth();
+
+  const pathName = usePathname();
+
+  const { activeIndex } = getActivePath(
+    pathName,
+    navItems.map((item) => item.href),
+    [signInPath(), signUpPath()],
+  );
 
   // this is to check if we are currently in the process of transitioning from open to closed or vice versa
   const [isTransition, setTransition] = useState(false);
@@ -47,10 +58,11 @@ const SideBar = () => {
     >
       <div className="px-3 py-2">
         <nav className="space-y-2">
-          {navItems.map((navItem) => (
+          {navItems.map((navItem, index) => (
             <SidebarItem
               key={navItem.title}
               isOpen={isOpen}
+              isActive={activeIndex === index}
               navItem={navItem}
             />
           ))}
