@@ -1,5 +1,6 @@
 import { Heading } from "@/components/heading";
 import { AccountTabs } from "@/features/account/components/account-tabs";
+import { AccountUpdateForm } from "@/features/account/components/account-update-form";
 
 const ProfilePage = () => {
   return (
@@ -9,6 +10,8 @@ const ProfilePage = () => {
         description="All your profile information"
         tabs={<AccountTabs />}
       />
+
+      <AccountUpdateForm />
     </div>
   );
 };

@@ -9,6 +9,8 @@ datasource db {
 model User {
   id String @id @default(cuid())
   username String @unique
+  firstName String
+  lastName String
   email String @unique
   // dont want store plain passwords in db. The password will be hashed thus protected in the case of a db breach
   passwordHash String
