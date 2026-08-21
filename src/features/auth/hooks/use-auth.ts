@@ -16,6 +16,11 @@ const useAuth = () => {
       setFetched(true);
     };
     fetchUser();
+
+    window.addEventListener("auth-changed", fetchUser);
+    return () => {
+      window.removeEventListener("auth-changed", fetchUser);
+    };
   }, [pathname]);
 
   return { user, isFetched };
