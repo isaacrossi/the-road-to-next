@@ -13,10 +13,14 @@ const users = [
   {
     username: "admin",
     email: "admin@admin.com",
+    firstName: "Admin",
+    lastName: "Admin",
   },
   {
     username: "user",
     email: process.env.EMAIL!,
+    firstName: "User",
+    lastName: "User",
   },
 ];
 

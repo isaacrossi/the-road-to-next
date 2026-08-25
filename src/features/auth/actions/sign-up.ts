@@ -17,6 +17,8 @@ import { setSessionCookie } from "../utils/session-cookie";
 
 const signUpSchema = z
   .object({
+    firstName: z.string().min(1).max(191),
+    lastName: z.string().min(1).max(191),
     username: z
       .string()
       .min(1)
@@ -49,10 +51,11 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
   // will check for confirmed password in validation schema
   // username, email, password are the entries we want to store in our database. confirmPassword is just for validation.
   try {
-    const { username, email, password } = signUpSchema.parse(
-      // shortcut to get object from formData
-      Object.fromEntries(formData),
-    );
+    const { username, email, password, firstName, lastName } =
+      signUpSchema.parse(
+        // shortcut to get object from formData
+        Object.fromEntries(formData),
+      );
 
     const passwordHash = await hashPassword(password);
 
@@ -65,6 +68,8 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
         username,
         email,
         passwordHash,
+        firstName,
+        lastName,
       },
     });
 

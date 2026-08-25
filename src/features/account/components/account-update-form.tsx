@@ -29,6 +29,32 @@ const AccountUpdateForm = ({ user }: AccountUpdateFormProps) => {
         router.refresh();
       }}
     >
+      <div className="flex flex-row space-x-2 space-y-2">
+        <div>
+          <Label htmlFor="firstName" className="mb-2">
+            First Name
+          </Label>
+          <Input
+            type="text"
+            id="firstName"
+            name="firstName"
+            defaultValue={user.firstName}
+          ></Input>
+          <FieldError actionState={actionState} name="firstName" />
+        </div>
+        <div>
+          <Label htmlFor="lastName" className="mb-2">
+            Last Name
+          </Label>
+          <Input
+            type="text"
+            id="lastName"
+            name="lastName"
+            defaultValue={user.lastName}
+          ></Input>
+          <FieldError actionState={actionState} name="username" />
+        </div>
+      </div>
       <Label htmlFor="username">Username</Label>
       <Input
         type="text"
