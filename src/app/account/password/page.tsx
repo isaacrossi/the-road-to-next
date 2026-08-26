@@ -5,7 +5,7 @@ import { AccountTabs } from "@/features/account/components/account-tabs";
 
 const PasswordPage = () => {
   return (
-    <div className="flex-1 flex flex-col gap-y-8 ">
+    <div className="flex flex-col gap-y-8 ">
       <div className="flex-1 flex flex-col gap-y-8">
         <Heading
           title="Password"
