@@ -5,4 +5,8 @@ export type NavItem = {
   title: string;
   icon: ReactElement<{ className?: string }>;
   href: string;
+  items?: {
+    title: string;
+    href: string;
+  }[];
 };
