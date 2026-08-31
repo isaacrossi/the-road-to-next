@@ -1,8 +1,8 @@
 import { Heading } from "@/components/heading";
 import { Card, CardContent } from "@/components/ui/card";
-import { AccountTabs } from "@/features/account/components/account-tabs";
 import { AccountUpdateForm } from "@/features/account/components/account-update-form";
 import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
+import { AccountTabs } from "../_navigation/tabs";
 
 const ProfilePage = async () => {
   const { user } = await getAuthOrRedirect();
