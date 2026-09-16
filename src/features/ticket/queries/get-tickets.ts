@@ -1,11 +1,17 @@
 import { prisma } from "@/lib/prisma";
+import { SearchParams } from "../search-params";
 
-export const getTickets = async (userId: string | undefined) => {
+export const getTickets = async (
+  userId: string | undefined,
+  searchParams: SearchParams,
+) => {
   return await prisma.ticket.findMany({
-    // if user id is undefined prisma will ingnore this property and just fetch all tickets
-    // if user id is defined prisma will fetch all tickets for that user
     where: {
       userId,
+      title: {
+        contains: searchParams.search,
+        mode: "insensitive",
+      },
     },
     orderBy: {
       createdAt: "desc",

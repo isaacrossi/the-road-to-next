@@ -33,7 +33,10 @@ const SearchInput = ({ placeholder }: SearchInputProps) => {
     // if user searches again and value is 3 we will get /tickets (removes search param)
     // if user searches again and value is 33 we will get /tickets?search=33
     // this is used to update the url without reloading the page
+    // params is only a url search params instance but when we use to string() it becomes a string
+    // the replace method is used to replace the current url with the new url
     replace(`${pathname}?${params.toString()}`, {
+      // users stays on current scroll position
       scroll: false,
     });
   };
