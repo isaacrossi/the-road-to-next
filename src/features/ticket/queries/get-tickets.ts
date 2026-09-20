@@ -5,16 +5,22 @@ export const getTickets = async (
   userId: string | undefined,
   searchParams: SearchParams,
 ) => {
+  console.log(searchParams.sort);
+
   return await prisma.ticket.findMany({
     where: {
       userId,
       title: {
-        contains: searchParams.search,
-        mode: "insensitive",
+        ...(typeof searchParams.search === "string" && {
+          contains: searchParams.search,
+          mode: "insensitive",
+        }),
       },
     },
+    // we conditionally destructure our configuration objects and pass the resulting object to the orderBy configuration
     orderBy: {
-      createdAt: "desc",
+      ...(searchParams.sort === undefined && { createdAt: "desc" }),
+      ...(searchParams.sort === "bounty" && { bounty: "desc" }),
     },
     include: {
       user: {
