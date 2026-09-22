@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import { SearchParams } from "../search-params";
+import { ParsedSearchParams } from "../search-params";
 
 export const getTickets = async (
   userId: string | undefined,
-  searchParams: SearchParams,
+  searchParams: ParsedSearchParams,
 ) => {
   console.log(searchParams.sort);
 
@@ -11,15 +11,13 @@ export const getTickets = async (
     where: {
       userId,
       title: {
-        ...(typeof searchParams.search === "string" && {
-          contains: searchParams.search,
-          mode: "insensitive",
-        }),
+        contains: searchParams.search,
+        mode: "insensitive",
       },
     },
     // we conditionally destructure our configuration objects and pass the resulting object to the orderBy configuration
     orderBy: {
-      ...(searchParams.sort === undefined && { createdAt: "desc" }),
+      ...(searchParams.sort === "newest" && { createdAt: "desc" }),
       ...(searchParams.sort === "bounty" && { bounty: "desc" }),
     },
     include: {
