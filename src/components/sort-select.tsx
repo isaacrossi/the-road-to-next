@@ -1,10 +1,10 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ChangeEvent } from "react";
+import { useQueryState } from "nuqs";
+import { sortParser } from "@/features/ticket/search-params";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -16,41 +16,18 @@ type Option = {
 };
 
 type SortSelectProps = {
-  defaultValue: string;
   options: Option[];
 };
 
-const SortSelect = ({ defaultValue, options }: SortSelectProps) => {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
+const SortSelect = ({ options }: SortSelectProps) => {
+  const [sort, setSort] = useQueryState("sort", sortParser);
 
-  // onValueChange passes the selected option's value string directly to our handleSort function (shadcn ui),
-  // so we type the 'value' parameter as string rather than an event object (see search-input.tsx for the difference).
   const handleSort = (value: string) => {
-    const params = new URLSearchParams(searchParams);
-
-    // we only update the search params if the value is not the default value
-    if (value === defaultValue) {
-      params.delete("sort");
-    } else if (value) {
-      params.set("sort", value);
-    } else {
-      params.delete("sort");
-    }
-
-    replace(`${pathname}?${params.toString()}`, {
-      scroll: false,
-    });
+    setSort(value);
   };
 
   return (
-    <Select
-      onValueChange={handleSort}
-      // if we have a sort value in the url set the default value to that value else set it to the default value passed in
-      // This prevents the select from resetting to the default value when the page is re-rendered
-      defaultValue={searchParams.get("sort")?.toString() || defaultValue}
-    >
+    <Select onValueChange={handleSort} defaultValue={sort}>
       <SelectTrigger>
         <SelectValue />
       </SelectTrigger>
