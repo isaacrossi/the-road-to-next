@@ -7,10 +7,16 @@ export const searchParser = parseAsString.withDefault("").withOptions({
   shallow: false,
   clearOnDefault: true,
 });
-export const sortParser = parseAsString.withDefault("newest").withOptions({
+
+export const sortParser = {
+  sortKey: parseAsString.withDefault("createdAt"),
+  sortValue: parseAsString.withDefault("desc"),
+};
+
+export const sortOptions = {
   shallow: false,
   clearOnDefault: true,
-});
+};
 
 // define caches searchparams with create searchparams cache
 export const searchParamsCache = createSearchParamsCache({
@@ -18,7 +24,7 @@ export const searchParamsCache = createSearchParamsCache({
   // if a query is empty we don't have to worry about checking for null and setting an empty string
   // when using the params
   search: searchParser,
-  sort: sortParser,
+  ...sortParser,
 });
 
 // .parse() returns a Promise containing the parsed searchParams
