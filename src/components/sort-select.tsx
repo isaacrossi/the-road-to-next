@@ -25,12 +25,8 @@ const SortSelect = ({ options }: SortSelectProps) => {
   // the second value becomes the sort options coming from search-params
   const [sort, setSort] = useQueryStates(sortParser, sortOptions);
 
-  const handleSort = (sortKey: string) => {
-    // we hardcoded the sort value in the options prop when calling this component in TicketList
-    // we can find the sort value by looking for the option with the same sortKey
-    const sortValue = options.find(
-      (option) => option.sortKey === sortKey,
-    )?.sortValue;
+  const handleSort = (compositeKey: string) => {
+    const [sortKey, sortValue] = compositeKey.split("_");
 
     setSort({ sortKey, sortValue });
   };
@@ -38,14 +34,20 @@ const SortSelect = ({ options }: SortSelectProps) => {
   return (
     // defaultValue will be the latest value of sortKey from our url state
     // so we will get the correct sort selected from the start but also retain the latest sort value for future renders
-    <Select onValueChange={handleSort} defaultValue={sort.sortKey}>
+    <Select
+      onValueChange={handleSort}
+      defaultValue={sort.sortKey + "_" + sort.sortValue}
+    >
       <SelectTrigger>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
         {options.map((option) => (
           // we also use sortKey for the value because we want to know if its sorted by createdAt or bounty, see options passed in TicketList
-          <SelectItem key={option.sortKey} value={option.sortKey}>
+          <SelectItem
+            key={option.sortKey + option.sortValue}
+            value={option.sortKey + "_" + option.sortValue}
+          >
             {option.label}
           </SelectItem>
         ))}
