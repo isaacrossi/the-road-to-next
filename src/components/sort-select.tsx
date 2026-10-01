@@ -1,6 +1,5 @@
 "use client";
-import { useQueryStates } from "nuqs";
-import { sortOptions, sortParser } from "@/features/ticket/search-params";
+
 import {
   Select,
   SelectContent,
@@ -9,26 +8,37 @@ import {
   SelectValue,
 } from "./ui/select";
 
-type Option = {
+export type SortSelectOption = {
   sortKey: string;
   sortValue: string;
   label: string;
 };
 
-type SortSelectProps = {
-  options: Option[];
+type SortObject = {
+  sortKey: string;
+  sortValue: string;
 };
 
-const SortSelect = ({ options }: SortSelectProps) => {
+// define our new props coming from the TicketSortSelect
+// we define value as a SortObject which is defined above
+// we define onChange as a function that takes a SortObject and returns void
+// we define options as an array of SortSelectOption which is defined above
+type SortSelectProps = {
+  value: SortObject;
+  onChange: (sort: SortObject) => void;
+  options: SortSelectOption[];
+};
+
+// destructure our new props
+const SortSelect = ({ value, onChange, options }: SortSelectProps) => {
   // we tell nuqs we are no longer using a primitive data type here by changing to useQueryStates
   // sortParser becomes the first option because sortParser already defines the keys
   // the second value becomes the sort options coming from search-params
-  const [sort, setSort] = useQueryStates(sortParser, sortOptions);
 
   const handleSort = (compositeKey: string) => {
     const [sortKey, sortValue] = compositeKey.split("_");
 
-    setSort({ sortKey, sortValue });
+    onChange({ sortKey, sortValue });
   };
 
   return (
@@ -36,7 +46,7 @@ const SortSelect = ({ options }: SortSelectProps) => {
     // so we will get the correct sort selected from the start but also retain the latest sort value for future renders
     <Select
       onValueChange={handleSort}
-      defaultValue={sort.sortKey + "_" + sort.sortValue}
+      defaultValue={value.sortKey + "_" + value.sortValue}
     >
       <SelectTrigger>
         <SelectValue />

@@ -1,31 +1,30 @@
 "use client";
 
-import { useQueryState } from "nuqs";
 import { ChangeEvent } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { searchParser } from "@/features/ticket/search-params";
 import { Input } from "./ui/input";
 
+// defines the new props of this component coming from the parent
 type SearchInputProps = {
   placeholder: string;
+  value: string;
+  onChange: (value: string) => void;
 };
 
-const SearchInput = ({ placeholder }: SearchInputProps) => {
-  // search state and setter for the search query param used for url state
-  // then we provide the key for the url state and the searchParse which knows how to parse the query param
-  // but also the default value and options for the query param
-  const [search, setSearch] = useQueryState("search", searchParser);
-
+// destructure value and on change now as well as placeholder like before
+const SearchInput = ({ placeholder, value, onChange }: SearchInputProps) => {
+  // onChange is our setSearch in the parent component (TicketSearchInput)
   const handleSearch = useDebouncedCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      setSearch(event.target.value);
+      onChange(event.target.value);
     },
     250,
   );
 
+  // value is our search in the parent component (TicketSearchInput)
   return (
     <Input
-      defaultValue={search}
+      defaultValue={value}
       placeholder={placeholder}
       onChange={handleSearch}
     />
