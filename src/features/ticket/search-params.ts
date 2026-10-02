@@ -1,4 +1,8 @@
-import { createSearchParamsCache, parseAsString } from "nuqs/server";
+import {
+  createSearchParamsCache,
+  parseAsInteger,
+  parseAsString,
+} from "nuqs/server";
 
 // shallow: will rerender our server components whenever the app router changes
 // clear on default: when the value is the default value we want to remove it from the url. If we sort or search we will
@@ -18,6 +22,16 @@ export const sortOptions = {
   clearOnDefault: true,
 };
 
+export const paginationParser = {
+  page: parseAsInteger.withDefault(0),
+  size: parseAsInteger.withDefault(2),
+};
+
+export const paginationOptions = {
+  shallow: false,
+  clearOnDefault: true,
+};
+
 // define caches searchparams with create searchparams cache
 export const searchParamsCache = createSearchParamsCache({
   // we pass an empty string as the default value for search and sort
@@ -25,6 +39,7 @@ export const searchParamsCache = createSearchParamsCache({
   // when using the params
   search: searchParser,
   ...sortParser,
+  ...paginationParser,
 });
 
 // .parse() returns a Promise containing the parsed searchParams
