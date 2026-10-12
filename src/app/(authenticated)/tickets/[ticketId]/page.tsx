@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
+import { CommentsList } from "@/features/comment/components/comments-list";
 import { TicketItem } from "@/features/ticket/components/ticket-item";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
 import { homePath } from "@/paths";
@@ -40,6 +41,8 @@ const TicketPage = async ({ params }: TicketPageProps) => {
       <div className="flex justify-center animate-fade-from-top">
         <TicketItem ticket={ticket} isDetail />
       </div>
+
+      <CommentsList ticketId={ticketId} />
     </div>
   );
 };

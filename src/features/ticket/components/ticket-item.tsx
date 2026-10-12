@@ -72,8 +72,8 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
   return (
     <div
       className={clsx("w-full flex gap-x-1", {
-        "max-w-[580px]": isDetail,
-        "max-w-[420px]": !isDetail,
+        "max-w-145": isDetail,
+        "max-w-105": !isDetail,
       })}
     >
       <Card className="w-full">
