@@ -12,6 +12,9 @@ const getComments = async (ticketId: string) => {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return { list: comments };
