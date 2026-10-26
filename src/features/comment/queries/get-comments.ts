@@ -17,7 +17,7 @@ const getComments = async (ticketId: string) => {
     },
   });
 
-  return { list: comments };
+  return comments;
 };
 
 export { getComments };

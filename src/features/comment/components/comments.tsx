@@ -1,17 +1,17 @@
 import { CardCompact } from "@/components/card-compact";
 import { getAuth } from "@/features/auth/queries/get-auth";
 import { isOwner } from "@/features/auth/utils/is-owner";
-import { getComments } from "../queries/get-comments";
 import { CommentCreateForm } from "./comment-create-form";
 import { CommentDeleteButton } from "./comment-delete-button";
 import { CommentItem } from "./comment-item";
+import { CommentWithMetadata } from "../types";
 
 type CommentsProps = {
   ticketId: string;
+  comments?: CommentWithMetadata[];
 };
 
-const Comments = async ({ ticketId }: CommentsProps) => {
-  const { list: comments } = await getComments(ticketId);
+const Comments = async ({ ticketId, comments = [] }: CommentsProps) => {
   const { user } = await getAuth();
 
   return (

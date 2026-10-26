@@ -5,6 +5,7 @@ import { CommentCreateForm } from "@/features/comment/components/comment-create-
 import { TicketItem } from "@/features/ticket/components/ticket-item";
 import { getTicket } from "@/features/ticket/queries/get-ticket";
 import { homePath } from "@/paths";
+import { getComments } from "@/features/comment/queries/get-comments";
 
 type TicketPageProps = {
   params: Promise<{
@@ -14,7 +15,14 @@ type TicketPageProps = {
 
 const TicketPage = async ({ params }: TicketPageProps) => {
   const { ticketId } = await params;
-  const ticket = await getTicket(ticketId);
+
+  const ticketPromise = getTicket(ticketId);
+  const commentsPromise = getComments(ticketId);
+
+  const [ticket, comments] = await Promise.all([
+    ticketPromise,
+    commentsPromise,
+  ]);
 
   if (!ticket) {
     notFound();
@@ -39,7 +47,7 @@ const TicketPage = async ({ params }: TicketPageProps) => {
       <Separator />
 
       <div className="flex justify-center animate-fade-from-top">
-        <TicketItem ticket={ticket} isDetail />
+        <TicketItem ticket={ticket} isDetail comments={comments} />
       </div>
     </div>
   );
