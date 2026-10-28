@@ -10,6 +10,7 @@ type CommentsProps = {
 };
 
 const Comments = ({ ticketId, comments = [] }: CommentsProps) => {
+  console.log("Where am i rendered");
   return (
     <>
       <CardCompact
