@@ -19,7 +19,7 @@ const TicketPage = async ({ params }: TicketPageProps) => {
   const ticketPromise = getTicket(ticketId);
   const commentsPromise = getComments(ticketId);
 
-  const [ticket, comments] = await Promise.all([
+  const [ticket, paginatedComments] = await Promise.all([
     ticketPromise,
     commentsPromise,
   ]);
@@ -50,7 +50,12 @@ const TicketPage = async ({ params }: TicketPageProps) => {
         <TicketItem
           ticket={ticket}
           isDetail
-          comments={<Comments ticketId={ticketId} comments={comments} />}
+          comments={
+            <Comments
+              ticketId={ticketId}
+              paginatedComments={paginatedComments}
+            />
+          }
         />
       </div>
     </div>

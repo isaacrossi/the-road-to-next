@@ -22,16 +22,27 @@ export const createComment = async (
 ) => {
   const { user } = await getAuthOrRedirect();
 
+  // need to define it outside the try catch block so it can be accessed on a wider level
+  // namely in the return statement
+  let comment;
+
   try {
     const data = createCommentSchema.parse({
       content: formData.get("content"),
     });
 
-    await prisma.comment.create({
+    comment = await prisma.comment.create({
       data: {
         ...data,
         userId: user.id,
         ticketId: id,
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
       },
     });
   } catch (error) {
@@ -40,5 +51,8 @@ export const createComment = async (
 
   revalidatePath(ticketPath(id));
 
-  return toActionState("SUCCESS", "comment created");
+  return toActionState("SUCCESS", "comment created", undefined, {
+    ...comment,
+    isOwner: true,
+  });
 };

@@ -9,6 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { CommentWithMetadata } from "@/features/comment/types";
 import { Form } from "./form/components/form";
 import { SubmitButton } from "./form/components/submit-button";
 import { ActionState, EMPTY_ACTION_STATE } from "./form/utils/to-action-state";
@@ -16,6 +17,7 @@ import { ActionState, EMPTY_ACTION_STATE } from "./form/utils/to-action-state";
 type UseConfirmDialogProps = {
   action: () => Promise<ActionState>;
   trigger: React.ReactElement<{ onClick?: React.MouseEventHandler }>;
+  onSuccess?: (actionState: ActionState) => void;
   title?: string;
   description?: string;
 };
@@ -25,6 +27,7 @@ const useConfirmDialog = ({
   description = "This action cannot be undone. Make sure you understand the consequences.",
   action,
   trigger,
+  onSuccess,
 }: UseConfirmDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,7 +39,9 @@ const useConfirmDialog = ({
 
   const handleSuccess = () => {
     setIsOpen(false);
+    onSuccess?.(actionState);
   };
+
   const dialog = (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
