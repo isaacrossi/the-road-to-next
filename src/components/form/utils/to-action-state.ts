@@ -1,24 +1,26 @@
 import { flattenError, ZodError } from "zod";
 
-export type ActionState = {
+// make ActionState a generic with a type default of unknown and then data is our provided generic
+export type ActionState<T = unknown> = {
   status?: "SUCCESS" | "ERROR";
   message: string;
   fieldErrors: Record<string, string[] | undefined>;
   payload?: FormData;
   timestamp: number;
-  data?: unknown;
+  data?: T;
 };
 
-export const EMPTY_ACTION_STATE: ActionState = {
+// `never` data makes this assignable to ActionState<T> for any T
+export const EMPTY_ACTION_STATE: ActionState<never> = {
   message: "",
   fieldErrors: {},
   timestamp: Date.now(),
 };
 
-export const fromErrorToActionState = (
+export const fromErrorToActionState = <T = unknown>(
   error: unknown,
   formData?: FormData,
-): ActionState => {
+): ActionState<T> => {
   if (error instanceof ZodError) {
     return {
       status: "ERROR",
@@ -46,12 +48,12 @@ export const fromErrorToActionState = (
   }
 };
 
-export const toActionState = (
+export const toActionState = <T = unknown>(
   status: ActionState["status"],
   message: string,
   formData?: FormData,
-  data?: unknown,
-): ActionState => {
+  data?: T,
+): ActionState<T> => {
   return {
     status,
     message,

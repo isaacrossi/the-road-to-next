@@ -10,6 +10,7 @@ import {
 import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { prisma } from "@/lib/prisma";
 import { ticketPath } from "@/paths";
+import { CommentWithMetadata } from "../types";
 
 const createCommentSchema = z.object({
   content: z.string().min(1).max(1024),
@@ -17,9 +18,9 @@ const createCommentSchema = z.object({
 
 export const createComment = async (
   id: string,
-  _actionState: ActionState,
+  _actionState: ActionState<CommentWithMetadata | undefined>,
   formData: FormData,
-) => {
+): Promise<ActionState<CommentWithMetadata | undefined>> => {
   const { user } = await getAuthOrRedirect();
 
   // need to define it outside the try catch block so it can be accessed on a wider level

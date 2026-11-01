@@ -36,7 +36,8 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
   };
 
   // takes a comment and prepends it to an array of the previous comments
-  const handleCreateComment = (comment: CommentWithMetadata) => {
+  const handleCreateComment = (comment: CommentWithMetadata | undefined) => {
+    if (!comment) return;
     setComments((prevComments) => [comment, ...prevComments]);
   };
 

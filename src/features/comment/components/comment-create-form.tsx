@@ -15,7 +15,7 @@ import { CommentWithMetadata } from "../types";
 type CommentCreateFormProps = {
   ticketId: string;
   // optional because if we are using this from in a server component the cache will revalidate anyway
-  onCreateComment?: (comment: CommentWithMetadata) => void;
+  onCreateComment?: (comment: CommentWithMetadata | undefined) => void;
 };
 
 const CommentCreateForm = ({
@@ -29,8 +29,10 @@ const CommentCreateForm = ({
 
   // we were able to include the result from our server action in the action state and use it in there
   // for the onCreateComment callback handler
-  const handleSuccess = (actionState: ActionState) => {
-    onCreateComment?.(actionState.data as CommentWithMetadata);
+  const handleSuccess = (
+    actionState: ActionState<CommentWithMetadata | undefined>,
+  ) => {
+    onCreateComment?.(actionState.data);
   };
 
   return (
